@@ -71,22 +71,22 @@
                                             <span x-cloak x-show="showBalances">{{ number_format($stock->quantity) }}</span>
                                             <span x-cloak x-show="!showBalances">***</span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-slate-900">{{ number_format($stock->avg_price / 1000, 2, ',', '.') }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-slate-900">{{ number_format($stock->current_price / 1000, 2, ',', '.') }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-slate-900">{{ number_format($stock->avg_price / 1000, $stock->avg_price % 1000 == 0 ? 0 : 2, ',', '.') }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-slate-900">{{ number_format($stock->current_price / 1000, $stock->current_price % 1000 == 0 ? 0 : 2, ',', '.') }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-slate-600">
-                                            <span x-cloak x-show="showBalances">{{ number_format($invested / 1000000, 2, ',', '.') }} Tr</span>
+                                            <span x-cloak x-show="showBalances">{{ number_format($invested / 1000000, ($invested / 1000000) == (int)($invested / 1000000) ? 0 : 2, ',', '.') }} Tr</span>
                                             <span x-cloak x-show="!showBalances">***</span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-medium text-slate-800">
-                                            <span x-cloak x-show="showBalances">{{ number_format($currentValue / 1000000, 2, ',', '.') }} Tr</span>
+                                            <span x-cloak x-show="showBalances">{{ number_format($currentValue / 1000000, ($currentValue / 1000000) == (int)($currentValue / 1000000) ? 0 : 2, ',', '.') }} Tr</span>
                                             <span x-cloak x-show="!showBalances">***</span>
                                         </td>
                                         <td class="px-6 py-4 text-right">
                                             <div class="whitespace-nowrap text-sm font-bold {{ $profit >= 0 ? 'text-emerald-600' : 'text-rose-600' }}">
-                                                {{ $profit >= 0 ? '+' : '' }}{{ number_format($profit / 1000000, 2, ',', '.') }} Tr
+                                                {{ $profit >= 0 ? '+' : '' }}{{ number_format($profit / 1000000, ($profit / 1000000) == (int)($profit / 1000000) ? 0 : 2, ',', '.') }} Tr
                                             </div>
                                             <div class="whitespace-nowrap text-xs font-medium {{ $profitPct >= 0 ? 'text-emerald-500' : 'text-rose-500' }}">
-                                                {{ $profitPct >= 0 ? '+' : '' }}{{ number_format($profitPct, 2) }}%
+                                                {{ $profitPct >= 0 ? '+' : '' }}{{ number_format($profitPct, $profitPct == (int)$profitPct ? 0 : 2, ',', '.') }}%
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
