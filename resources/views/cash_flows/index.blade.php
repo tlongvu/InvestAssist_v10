@@ -44,7 +44,7 @@
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-medium {{ $flow->type == 'deposit' ? 'text-green-600' : 'text-red-600' }}">
-                                            {{ $flow->type == 'deposit' ? '+' : '-' }}{{ number_format($flow->amount, $flow->amount == (int)$flow->amount ? 0 : 2, ',', '.') }}
+                                            {{ $flow->type == 'deposit' ? '+' : '-' }}{{ number_format($flow->amount, 2, ',', '.') }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <a href="{{ route('cash-flows.edit', $flow) }}" class="text-indigo-600 hover:text-indigo-900 mr-3">Sửa</a>

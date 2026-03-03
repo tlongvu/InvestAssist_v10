@@ -98,18 +98,18 @@ class DashboardController extends Controller
         foreach ($stockPerformance as $perf) {
             $stocks[$perf['stock']->symbol] = [
                 'current_price' => $perf['stock']->current_price,
-                'current_price_formatted' => number_format($perf['stock']->current_price / 1000, $perf['stock']->current_price % 1000 == 0 ? 0 : 2, ',', '.'),
-                'pnl_absolute' => number_format($perf['profit'], 0, ',', '.'),
-                'pnl_percentage' => number_format($perf['profit_percentage'], $perf['profit_percentage'] == (int)$perf['profit_percentage'] ? 0 : 2, ',', '.'),
+                'current_price_formatted' => number_format($perf['stock']->current_price / 1000, 2, ',', '.'),
+                'pnl_absolute' => number_format($perf['profit'], 2, ',', '.'),
+                'pnl_percentage' => number_format($perf['profit_percentage'], 2, ',', '.'),
                 'is_profit' => $perf['profit'] >= 0,
             ];
         }
 
         return response()->json([
-            'invested' => number_format($portfolioService->calculateTotalInvested(), 0, ',', '.'),
-            'currentValue' => number_format($currentValue, 0, ',', '.'),
-            'profitLossAbsolute' => number_format($profitLoss['absolute'], 0, ',', '.'),
-            'profitLossPercentage' => number_format($profitLoss['percentage'], $profitLoss['percentage'] == (int)$profitLoss['percentage'] ? 0 : 2, ',', '.'),
+            'invested' => number_format($portfolioService->calculateTotalInvested(), 2, ',', '.'),
+            'currentValue' => number_format($currentValue, 2, ',', '.'),
+            'profitLossAbsolute' => number_format($profitLoss['absolute'], 2, ',', '.'),
+            'profitLossPercentage' => number_format($profitLoss['percentage'], 2, ',', '.'),
             'isProfit' => $profitLoss['absolute'] >= 0,
             'stocks' => $stocks
         ]);

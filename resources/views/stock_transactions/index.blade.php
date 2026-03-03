@@ -48,8 +48,8 @@
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-slate-900">{{ number_format($transaction->quantity) }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-slate-900">{{ number_format($transaction->price, $transaction->price == (int)$transaction->price ? 0 : 2, ',', '.') }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-medium text-slate-900">{{ number_format($transaction->quantity * $transaction->price, ($transaction->quantity * $transaction->price) == (int)($transaction->quantity * $transaction->price) ? 0 : 2, ',', '.') }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-slate-900">{{ number_format($transaction->price, 2, ',', '.') }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-medium text-slate-900">{{ number_format($transaction->quantity * $transaction->price, 2, ',', '.') }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <a href="{{ route('stock-transactions.edit', $transaction) }}" class="text-indigo-600 hover:text-indigo-900 mr-3">Sửa</a>
                                             <form action="{{ route('stock-transactions.destroy', $transaction) }}" method="POST" class="inline-block">

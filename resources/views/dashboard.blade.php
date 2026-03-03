@@ -18,13 +18,13 @@
             <!-- Total Invested -->
             <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-4 md:p-6 flex flex-col justify-center items-start">
                 <div class="text-sm font-medium text-slate-500 mb-1">Tổng vốn đầu tư</div>
-                <div class="text-2xl md:text-3xl font-bold text-slate-900 private-number" data-value="{{ $invested }}">{{ number_format($invested, 0, ',', '.') }}</div>
+                <div class="text-2xl md:text-3xl font-bold text-slate-900 private-number" data-value="{{ $invested }}">{{ number_format($invested, 2, ',', '.') }}</div>
             </div>
 
             <!-- Current Portfolio Value -->
             <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-4 md:p-6 flex flex-col justify-center items-start">
                 <div class="text-sm font-medium text-slate-500 mb-1">Giá trị hiện tại</div>
-                <div class="text-2xl md:text-3xl font-bold text-slate-900 private-number" id="current-value-display" data-value="{{ $currentValue }}">{{ number_format($currentValue, 0, ',', '.') }}</div>
+                <div class="text-2xl md:text-3xl font-bold text-slate-900 private-number" id="current-value-display" data-value="{{ $currentValue }}">{{ number_format($currentValue, 2, ',', '.') }}</div>
             </div>
 
             <!-- Total P&L -->
@@ -32,7 +32,7 @@
                 <div class="text-sm font-medium text-slate-500 mb-1">Tổng Lợi nhuận / Thua lỗ</div>
                 <div class="flex items-baseline space-x-2">
                     <div id="profit-loss-display" class="text-2xl md:text-3xl font-bold {{ $profitLoss['absolute'] >= 0 ? 'text-emerald-600' : 'text-rose-600' }} private-number" data-value="{{ $profitLoss['absolute'] }}" data-sign="{{ $profitLoss['absolute'] > 0 ? '+' : '' }}">
-                        {{ $profitLoss['absolute'] > 0 ? '+' : '' }}{{ number_format($profitLoss['absolute'], 0, ',', '.') }}
+                        {{ $profitLoss['absolute'] > 0 ? '+' : '' }}{{ number_format($profitLoss['absolute'], 2, ',', '.') }}
                     </div>
                     <div id="profit-loss-percentage" class="text-sm font-medium {{ $profitLoss['percentage'] >= 0 ? 'text-emerald-500' : 'text-rose-500' }} private-number" data-value="{{ $profitLoss['percentage'] }}" data-sign="{{ $profitLoss['percentage'] > 0 ? '+' : '' }}" data-suffix="%">
                         ({{ $profitLoss['percentage'] > 0 ? '+' : '' }}{{ number_format($profitLoss['percentage'], 2, ',', '.') }}%)
@@ -243,23 +243,23 @@
                                     {{ number_format($performance['stock']->quantity) }}
                                 </td>
                                 <td class="px-4 py-4 whitespace-nowrap text-right text-sm text-slate-600">
-                                    {{ number_format($performance['stock']->avg_price / 1000, $performance['stock']->avg_price % 1000 == 0 ? 0 : 2, ',', '.') }}
+                                    {{ number_format($performance['stock']->avg_price / 1000, 2, ',', '.') }}
                                 </td>
                                 <td class="px-4 py-4 whitespace-nowrap text-right text-sm font-medium text-slate-800" id="current-price-{{ $performance['stock']->symbol }}">
-                                    {{ number_format($performance['stock']->current_price / 1000, $performance['stock']->current_price % 1000 == 0 ? 0 : 2, ',', '.') }}
+                                    {{ number_format($performance['stock']->current_price / 1000, 2, ',', '.') }}
                                 </td>
                                 <td class="px-4 py-4 whitespace-nowrap text-right text-sm text-slate-600 private-number" data-value="{{ $performance['invested'] / 1000000 }}" data-suffix=" Tr">
-                                    {{ number_format($performance['invested'] / 1000000, ($performance['invested'] / 1000000) == (int)($performance['invested'] / 1000000) ? 0 : 2, ',', '.') }} Tr
+                                    {{ number_format($performance['invested'] / 1000000, 2, ',', '.') }} Tr
                                 </td>
                                 <td class="px-4 py-4 whitespace-nowrap text-right text-sm font-medium text-slate-800 private-number" data-value="{{ $currentVal / 1000000 }}" data-suffix=" Tr">
-                                    {{ number_format($currentVal / 1000000, ($currentVal / 1000000) == (int)($currentVal / 1000000) ? 0 : 2, ',', '.') }} Tr
+                                    {{ number_format($currentVal / 1000000, 2, ',', '.') }} Tr
                                 </td>
                                 <td class="px-4 py-4 whitespace-nowrap text-right">
                                     <div id="pnl-abs-{{ $performance['stock']->symbol }}" class="font-bold text-sm {{ $performance['profit'] >= 0 ? 'text-emerald-600' : 'text-rose-600' }} private-number" data-value="{{ $performance['profit'] / 1000000 }}" data-sign="{{ $performance['profit'] > 0 ? '+' : '' }}" data-suffix=" Tr">
-                                        {{ $performance['profit'] > 0 ? '+' : '' }}{{ number_format($performance['profit'] / 1000000, ($performance['profit'] / 1000000) == (int)($performance['profit'] / 1000000) ? 0 : 2, ',', '.') }} Tr
+                                        {{ $performance['profit'] > 0 ? '+' : '' }}{{ number_format($performance['profit'] / 1000000, 2, ',', '.') }} Tr
                                     </div>
                                     <div id="pnl-pct-{{ $performance['stock']->symbol }}" class="text-xs font-medium {{ $performance['profit_percentage'] >= 0 ? 'text-emerald-500' : 'text-rose-500' }}">
-                                        {{ $performance['profit_percentage'] > 0 ? '+' : '' }}{{ number_format($performance['profit_percentage'], ($performance['profit_percentage'] == (int)$performance['profit_percentage']) ? 0 : 2, ',', '.') }}%
+                                        {{ $performance['profit_percentage'] > 0 ? '+' : '' }}{{ number_format($performance['profit_percentage'], 2, ',', '.') }}%
                                     </div>
                                 </td>
                                 <td class="px-4 py-4 whitespace-nowrap text-right text-sm font-medium">
