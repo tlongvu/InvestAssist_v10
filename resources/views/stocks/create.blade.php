@@ -58,14 +58,14 @@
                             <!-- Avg Price -->
                             <div>
                                 <x-input-label for="avg_price" :value="__('Giá vốn trung bình')" />
-                                <x-text-input id="avg_price" class="block mt-1 w-full" type="number" step="0.001" min="0" name="avg_price" :value="old('avg_price', 0)" required />
+                                <x-text-input id="avg_price" class="money-input block mt-1 w-full" type="text" name="avg_price" :value="old('avg_price', 0)" required />
                                 <x-input-error :messages="$errors->get('avg_price')" class="mt-2" />
                             </div>
 
                             <!-- Current Price -->
                             <div>
                                 <x-input-label for="current_price" :value="__('Giá hiện tại')" />
-                                <x-text-input id="current_price" class="block mt-1 w-full" type="number" step="0.001" min="0" name="current_price" :value="old('current_price', 0)" required />
+                                <x-text-input id="current_price" class="money-input block mt-1 w-full" type="text" name="current_price" :value="old('current_price', 0)" required />
                                 <x-input-error :messages="$errors->get('current_price')" class="mt-2" />
                             </div>
                         </div>

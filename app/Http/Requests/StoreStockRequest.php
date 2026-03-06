@@ -40,6 +40,8 @@ class StoreStockRequest extends FormRequest
         ];
     }
 
+    use \App\Traits\SanitizesMoneyInput;
+
     protected function prepareForValidation()
     {
         if ($this->has('symbol')) {
@@ -48,16 +50,16 @@ class StoreStockRequest extends FormRequest
             ]);
         }
 
-        // Convert x1000 price input (e.g. 1.85) to raw DB value (e.g. 1850)
+        // Clean commas and convert x1000 price input (e.g. 1.85) to raw DB value (e.g. 1850)
         if ($this->has('avg_price')) {
             $this->merge([
-                'avg_price' => $this->avg_price * 1000,
+                'avg_price' => $this->sanitizeMoney($this->avg_price) * 1000,
             ]);
         }
 
         if ($this->has('current_price')) {
             $this->merge([
-                'current_price' => $this->current_price * 1000,
+                'current_price' => $this->sanitizeMoney($this->current_price) * 1000,
             ]);
         }
     }

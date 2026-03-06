@@ -1,0 +1,10 @@
+{
+  "permission": {
+    "read": {
+      "D:/InvestAssist/InvestAssist_v10/.opencode/get-shit-done/*": "allow"
+    },
+    "external_directory": {
+      "D:/InvestAssist/InvestAssist_v10/.opencode/get-shit-done/*": "allow"
+    }
+  }
+}

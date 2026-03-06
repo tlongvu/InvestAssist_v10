@@ -1,6 +1,6 @@
 <div class="h-16 flex items-center px-6 border-b border-slate-200 shrink-0">
     <a href="{{ route('dashboard') }}" class="flex items-center gap-2">
-        <svg class="w-8 h-8 text-[#2563EB]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+        <img src="{{ asset('logo.svg') }}" alt="InvestAssist Logo" class="w-8 h-8 rounded-lg">
         <span class="text-xl font-bold tracking-tight text-[#09090B]">InvestAssist</span>
     </a>
 </div>

@@ -1,0 +1,35 @@
+
+=== KET QUA DONG BO ===
+Tong so file goc: 167
+So file giong nhau 100%: 123
+Ty le dong bo: 73.65%
+
+--- Thieu 5 file ben v10 ---
+.phpunit.result.cache
+InvestAssist.rar
+output_fireant.txt
+test_tg3.log
+database\database.sqlite
+
+--- Co 39 file khac noi dung ---
+vite.config.js
+app\Http\Controllers\Auth\RegisteredUserController.php
+config\filesystems.php
+composer.lock
+tests\TestCase.php
+config\mail.php
+routes\auth.php
+tests\Feature\Auth\EmailVerificationTest.php
+.editorconfig
+app\Http\Requests\ProfileUpdateRequest.php
+composer.json
+config\logging.php
+app\Http\Requests\Auth\LoginRequest.php
+app\Http\Controllers\Auth\VerifyEmailController.php
+app\Http\Controllers\Auth\EmailVerificationPromptController.php
+routes\console.php
+tests\Feature\Auth\AuthenticationTest.php
+tests\Feature\Auth\RegistrationTest.php
+app\Http\Controllers\DashboardController.php
+app\Http\Controllers\Auth\AuthenticatedSessionController.php
+...

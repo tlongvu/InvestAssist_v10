@@ -11,12 +11,23 @@ use Illuminate\Support\Collection;
 
 class PortfolioPerformanceService
 {
+    protected $customUserId = null;
+
+    /**
+     * Set a custom user ID for CLI or background job execution.
+     */
+    public function setUserId(int $userId): self
+    {
+        $this->customUserId = $userId;
+        return $this;
+    }
+
     /**
      * Lấy user_id của user hiện tại (hoặc truyền vào).
      */
     protected function userId(): int
     {
-        return auth()->id();
+        return $this->customUserId ?? auth()->id();
     }
 
     public function calculateTotalInvested(): float
@@ -28,7 +39,7 @@ class PortfolioPerformanceService
 
     public function calculateTotalCurrentValue(): float
     {
-        // Total Wealth = Value of current stocks + Liquid Cash on exchanges
+        // Total Wealth = Value of current stocks + Liquid Cash on exchanges (manual input)
         $stocksValue = Stock::where('user_id', $this->userId())->get()->sum(function ($stock) {
             return $stock->quantity * $stock->current_price;
         });
@@ -36,6 +47,21 @@ class PortfolioPerformanceService
         $liquidCash = $this->getLiquidCashByExchange()['total_liquid'] ?? 0;
         
         return $stocksValue + $liquidCash;
+    }
+
+    public function getWealthBreakdown(): array
+    {
+        $stocksValue = Stock::where('user_id', $this->userId())->get()->sum(function ($stock) {
+            return $stock->quantity * $stock->current_price;
+        });
+        
+        $liquidCash = $this->getLiquidCashByExchange()['total_liquid'] ?? 0;
+        
+        return [
+            'stocks'      => $stocksValue,
+            'liquid_cash' => $liquidCash,
+            'total'       => $stocksValue + $liquidCash,
+        ];
     }
 
     public function calculateProfitLoss(): array
@@ -56,20 +82,38 @@ class PortfolioPerformanceService
         return Stock::where('user_id', $this->userId())
             ->with(['exchange', 'industry'])
             ->get()
-            ->map(function ($stock) {
-                $invested = $stock->quantity * $stock->avg_price;
-                $currentValue = $stock->quantity * $stock->current_price;
-                $profit = $currentValue - $invested;
-                $profitPercentage = $invested > 0 ? ($profit / $invested) * 100 : 0;
+            ->groupBy('symbol')
+            ->map(function ($stocks) {
+                $totalQty      = $stocks->sum('quantity');
+                $totalInvested = $stocks->sum(fn($s) => $s->quantity * $s->avg_price);
+                $currentPrice  = $stocks->first()->current_price;
+                $currentValue  = $totalQty * $currentPrice;
+                $profit        = $currentValue - $totalInvested;
+                $profitPct     = $totalInvested > 0 ? ($profit / $totalInvested) * 100 : 0;
+                $avgPrice      = $totalQty > 0 ? round($totalInvested / $totalQty) : 0;
+
+                $exchangeDisplay = $stocks
+                    ->map(fn($s) => optional($s->exchange)->name)
+                    ->filter()
+                    ->unique()
+                    ->join(' + ');
+
+                $industry = optional($stocks->first()->industry)->name ?? '';
 
                 return [
-                    'stock'            => $stock,
-                    'invested'         => $invested,
+                    'symbol'           => $stocks->first()->symbol,
+                    'exchange_display' => $exchangeDisplay,
+                    'industry'         => $industry,
+                    'quantity'         => $totalQty,
+                    'avg_price'        => $avgPrice,
+                    'current_price'    => $currentPrice,
+                    'invested'         => $totalInvested,
                     'current_value'    => $currentValue,
                     'profit'           => $profit,
-                    'profit_percentage' => $profitPercentage,
+                    'profit_percentage'=> $profitPct,
                 ];
-            });
+            })
+            ->values();
     }
 
     /**
@@ -185,96 +229,59 @@ class PortfolioPerformanceService
         return ['labels' => array_keys($allocation), 'data' => array_values($allocation)];
     }
 
-    public function getAssetHistory(string $period = 'month'): array
+    public function getAssetHistory(string $period = 'month', ?string $endDateStr = null): array
     {
-        $days = 30;
-        if ($period === 'week') $days = 7;
-        if ($period === 'day') $days = 2; // For day, we show yesterday and today at least
-
-        $endDate = \Carbon\Carbon::now();
-        $startDate = \Carbon\Carbon::now()->subDays($days + 5); // Fetch extra for weekend gap filling
-        
         $userId = $this->userId();
-        $stocks = Stock::where('user_id', $userId)->get();
-        if ($stocks->isEmpty()) {
-            return ['labels' => [], 'data' => []];
+        $today = \Carbon\Carbon::now()->startOfDay();
+
+        try {
+            $endDate = $endDateStr 
+                ? \Carbon\Carbon::createFromFormat('d/m/Y', $endDateStr)->startOfDay() 
+                : $today;
+        } catch (\Exception $e) {
+            $endDate = $today;
         }
 
-        // 1. Fetch historical prices for unique symbols
-        $symbols = $stocks->pluck('symbol')->unique()->toArray();
-        $historicalPrices = [];
-        foreach ($symbols as $symbol) {
-            $prices = \Illuminate\Support\Facades\Cache::remember("hist_prices_{$symbol}", 3600, function () use ($symbol, $startDate, $endDate) {
-                $sym = strtoupper($symbol);
-                $url = "https://www.fireant.vn/api/Data/Markets/HistoricalQuotes?symbol={$sym}&startDate={$startDate->format('Y-m-d')}&endDate={$endDate->format('Y-m-d')}";
-                try {
-                    $response = \Illuminate\Support\Facades\Http::timeout(5)->withHeaders(['User-Agent' => 'Mozilla/5.0'])->get($url);
-                    if ($response->successful()) {
-                        $json = $response->json();
-                        $res = [];
-                        foreach ((array)$json as $item) {
-                            $res[\Carbon\Carbon::parse($item['Date'])->format('Y-m-d')] = $item['Close'];
-                        }
-                        return $res;
-                    }
-                } catch (\Exception $e) {}
-                return [];
-            });
-            $historicalPrices[$symbol] = $prices;
+        // Không cho phép xem data tương lai
+        if ($endDate->gt($today)) {
+            $endDate = $today;
         }
 
-        // 2. Build time series
+        $query = \App\Models\AssetHistory::where('user_id', $userId)
+            ->where('date', '<=', $endDate->format('Y-m-d'));
+
+        if ($period === 'year') {
+            $rawHistories = $query->orderBy('date', 'asc')->get();
+            
+            $histories = $rawHistories->groupBy(function ($history) {
+                return \Carbon\Carbon::parse($history->date)->startOfWeek()->format('Y-m-d');
+            })->map(function ($weekItems) {
+                return $weekItems->sortBy('date')->last();
+            })->values();
+        } else {
+            // month (hôm nay) or custom_60
+            $histories = $query->orderBy('date', 'desc')
+                ->limit(60)
+                ->get()
+                ->reverse()
+                ->values();
+        }
+
         $labels = [];
         $values = [];
-        $currentCash = $this->getLiquidCashByExchange()['total_liquid'];
 
-        // Optimization: Fetch flows and trades once
-        $allFlows = CashFlow::where('user_id', $userId)->where('transaction_date', '>', $startDate->startOfDay())->get();
-        $allTrades = StockTransaction::whereHas('stock', fn($q) => $q->where('user_id', $userId))
-            ->where('transaction_date', '>', $startDate->startOfDay())->get();
-
-        for ($i = ($period === 'day' ? 1 : $days-1); $i >= 0; $i--) {
-            $dateObj = \Carbon\Carbon::now()->subDays($i);
-            $dateStr = $dateObj->format('Y-m-d');
-            $endOfDay = (clone $dateObj)->endOfDay();
-            
-            $valuation = 0;
-            foreach ($stocks as $stock) {
-                // Determine quantity on this day by walking back transactions
-                $tradesAfter = $allTrades->where('stock_id', $stock->id)->where('transaction_date', '>', $dateStr);
-                $buysAfter = $tradesAfter->where('type', 'buy')->sum('quantity');
-                $sellsAfter = $tradesAfter->where('type', 'sell')->sum('quantity');
-                $dayQuantity = $stock->quantity - $buysAfter + $sellsAfter;
-
-                if ($dayQuantity <= 0) continue;
-
-                $p = $historicalPrices[$stock->symbol][$dateStr] ?? null;
-                if (!$p) { // Weekend/Holiday fallback
-                    for ($j=1; $j<=5; $j++) {
-                        $prevDate = (clone $dateObj)->subDays($j)->format('Y-m-d');
-                        if (isset($historicalPrices[$stock->symbol][$prevDate])) {
-                            $p = $historicalPrices[$stock->symbol][$prevDate];
-                            break;
-                        }
-                    }
-                }
-                if (!$p) $p = ($dateObj->isFuture() || $dateObj->isToday()) ? $stock->current_price : $stock->avg_price;
-                $valuation += ($dayQuantity * $p);
-            }
-
-            // Cash on Day D = Current Cash - Deposits since Day D + Withdrawals since Day D
-            $netFlowSinceDay = $allFlows->where('transaction_date', '>', $dateStr)
-                ->sum(fn($f) => $f->type === 'deposit' ? $f->amount : -$f->amount);
-            
-            $netTradeCashSinceDay = $allTrades->where('transaction_date', '>', $dateStr)
-                ->sum(fn($t) => $t->type === 'buy' ? -$t->quantity * $t->price : $t->quantity * $t->price);
-            
-            $dayCash = $currentCash - $netFlowSinceDay - $netTradeCashSinceDay;
-            
-            $labels[] = ($period === 'day' && $i === 0) ? \Carbon\Carbon::now()->format('H:00') : $dateObj->format('d/m');
-            $values[] = round($valuation + $dayCash, 0);
+        foreach ($histories as $history) {
+            $dateObj = \Carbon\Carbon::parse($history->date);
+            $labels[] = $period === 'year'
+                ? 'W' . $dateObj->isoWeek() . '/' . $dateObj->year
+                : $dateObj->format('d/m');
+            $values[] = round($history->total_value, 0);
         }
 
-        return ['labels' => $labels, 'data' => $values];
+        return [
+            'labels' => $labels,
+            'data' => $values,
+            'has_real_data' => count($values) > 0
+        ];
     }
 }

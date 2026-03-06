@@ -39,7 +39,7 @@
                             <tbody class="bg-white divide-y divide-slate-200">
                                 @forelse ($stockTransactions as $transaction)
                                     <tr class="hover:bg-slate-50 transition-colors duration-200">
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{{ $transaction->transaction_date->format('Y-m-d') }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{{ $transaction->transaction_date->format('d/m/Y') }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-900">{{ $transaction->stock->symbol }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{{ $transaction->stock->exchange->name ?? 'N/A' }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm">

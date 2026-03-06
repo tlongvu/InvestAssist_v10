@@ -40,14 +40,14 @@
                             <!-- Amount -->
                             <div>
                                 <x-input-label for="amount" :value="__('Số tiền')" />
-                                <x-text-input id="amount" class="block mt-1 w-full" type="number" step="0.01" min="0.01" name="amount" :value="old('amount', $cashFlow->amount)" required />
+                                <x-text-input id="amount" class="money-input block mt-1 w-full" type="text" name="amount" :value="old('amount', number_format($cashFlow->amount, 0, '.', ','))" required />
                                 <x-input-error :messages="$errors->get('amount')" class="mt-2" />
                             </div>
 
                             <!-- Transaction Date -->
                             <div>
                                 <x-input-label for="transaction_date" :value="__('Ngày giao dịch')" />
-                                <x-text-input id="transaction_date" class="block mt-1 w-full" type="date" name="transaction_date" :value="old('transaction_date', $cashFlow->transaction_date->format('Y-m-d'))" required />
+                                <x-text-input id="transaction_date" class="datepicker block mt-1 w-full" type="text" name="transaction_date" :value="old('transaction_date', $cashFlow->transaction_date->format('Y-m-d'))" required />
                                 <x-input-error :messages="$errors->get('transaction_date')" class="mt-2" />
                             </div>
                         </div>

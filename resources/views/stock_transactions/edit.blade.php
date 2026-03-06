@@ -47,14 +47,14 @@
                             <!-- Price -->
                             <div>
                                 <x-input-label for="price" :value="__('Price per Share')" />
-                                <x-text-input id="price" class="block mt-1 w-full" type="number" step="0.01" min="0.01" name="price" :value="old('price', $stockTransaction->price)" required />
+                                <x-text-input id="price" class="money-input block mt-1 w-full" type="text" name="price" :value="old('price', number_format($stockTransaction->price, 0, '.', ','))" required />
                                 <x-input-error :messages="$errors->get('price')" class="mt-2" />
                             </div>
 
                             <!-- Transaction Date -->
                             <div>
                                 <x-input-label for="transaction_date" :value="__('Date')" />
-                                <x-text-input id="transaction_date" class="block mt-1 w-full" type="date" name="transaction_date" :value="old('transaction_date', $stockTransaction->transaction_date->format('Y-m-d'))" required />
+                                <x-text-input id="transaction_date" class="datepicker block mt-1 w-full" type="text" name="transaction_date" :value="old('transaction_date', $stockTransaction->transaction_date->format('Y-m-d'))" required />
                                 <x-input-error :messages="$errors->get('transaction_date')" class="mt-2" />
                             </div>
                         </div>

@@ -36,7 +36,7 @@
                             <tbody class="bg-white divide-y divide-slate-200">
                                 @forelse ($cashFlows as $flow)
                                     <tr class="hover:bg-slate-50 transition-colors duration-200">
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{{ $flow->transaction_date->format('Y-m-d') }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{{ $flow->transaction_date->format('d/m/Y') }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">{{ $flow->exchange->name }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm">
                                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $flow->type == 'deposit' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">

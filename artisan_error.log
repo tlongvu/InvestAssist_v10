@@ -1,0 +1,16 @@
+
+   ErrorException 
+
+  require(D:\InvestAssist\InvestAssist_v10\routes/auth.php): Failed to open stream: No such file or directory
+
+  at routes\web.php:42
+     38Ôûò Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+     39Ôûò     Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
+     40Ôûò });
+     41Ôûò 
+  Ô×£  42Ôûò require __DIR__.'/auth.php';
+     43Ôûò
+
+  1   routes\web.php:42
+  2   vendor\laravel\framework\src\Illuminate\Routing\RouteFileRegistrar.php:35
+

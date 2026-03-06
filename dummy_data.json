@@ -1,0 +1,207 @@
+{
+    "cash_flows": [
+        {
+            "id": 1,
+            "uuid": "019c9d08-7388-7048-92d8-6ef3fa2c33f0",
+            "exchange_id": 1,
+            "type": "deposit",
+            "amount": "500000000.00",
+            "transaction_date": "2025-08-27T00:00:00.000000Z",
+            "created_at": "2026-02-27T02:58:22.000000Z",
+            "updated_at": "2026-02-27T02:58:22.000000Z",
+            "exchange": {
+                "id": 1,
+                "uuid": "019c9d08-737e-712f-8833-ffd95f6b5ff6",
+                "name": "VnDirect",
+                "created_at": "2026-02-27T02:58:22.000000Z",
+                "updated_at": "2026-02-27T09:14:28.000000Z"
+            }
+        },
+        {
+            "id": 2,
+            "uuid": "019c9d08-7389-725b-89ea-7f34dedf8d84",
+            "exchange_id": 2,
+            "type": "deposit",
+            "amount": "200000000.00",
+            "transaction_date": "2025-11-27T00:00:00.000000Z",
+            "created_at": "2026-02-27T02:58:22.000000Z",
+            "updated_at": "2026-02-27T02:58:22.000000Z",
+            "exchange": {
+                "id": 2,
+                "uuid": "019c9d08-7380-7171-82d6-f1892045ce3e",
+                "name": "VPS",
+                "created_at": "2026-02-27T02:58:22.000000Z",
+                "updated_at": "2026-02-27T09:14:41.000000Z"
+            }
+        },
+        {
+            "id": 3,
+            "uuid": "019ca1f0-0cb0-739a-be0f-992439bcd848",
+            "exchange_id": 1,
+            "type": "deposit",
+            "amount": "500000000.00",
+            "transaction_date": "2026-02-28T00:00:00.000000Z",
+            "created_at": "2026-02-28T01:49:49.000000Z",
+            "updated_at": "2026-02-28T01:49:49.000000Z",
+            "exchange": {
+                "id": 1,
+                "uuid": "019c9d08-737e-712f-8833-ffd95f6b5ff6",
+                "name": "VnDirect",
+                "created_at": "2026-02-27T02:58:22.000000Z",
+                "updated_at": "2026-02-27T09:14:28.000000Z"
+            }
+        }
+    ],
+    "transactions": [
+        {
+            "id": 1,
+            "uuid": "019c9d08-738d-718d-8f04-a786e8b8aad3",
+            "stock_id": 1,
+            "type": "buy",
+            "quantity": 1000,
+            "price": "90000.00",
+            "transaction_date": "2025-09-27T00:00:00.000000Z",
+            "created_at": "2026-02-27T02:58:22.000000Z",
+            "updated_at": "2026-02-27T02:58:22.000000Z",
+            "stock": {
+                "id": 1,
+                "uuid": "019c9d08-738b-7315-b1f0-cf8dafd1db9f",
+                "symbol": "FPT",
+                "exchange_id": 1,
+                "industry_id": 2,
+                "quantity": 2000,
+                "avg_price": "95000.00",
+                "current_price": "92900.00",
+                "created_at": "2026-02-27T02:58:22.000000Z",
+                "updated_at": "2026-02-28T03:11:12.000000Z",
+                "exchange": {
+                    "id": 1,
+                    "uuid": "019c9d08-737e-712f-8833-ffd95f6b5ff6",
+                    "name": "VnDirect",
+                    "created_at": "2026-02-27T02:58:22.000000Z",
+                    "updated_at": "2026-02-27T09:14:28.000000Z"
+                }
+            }
+        },
+        {
+            "id": 2,
+            "uuid": "019c9d08-738e-7303-9a5a-8dc542291edb",
+            "stock_id": 1,
+            "type": "buy",
+            "quantity": 1000,
+            "price": "100000.00",
+            "transaction_date": "2025-12-27T00:00:00.000000Z",
+            "created_at": "2026-02-27T02:58:22.000000Z",
+            "updated_at": "2026-02-27T02:58:22.000000Z",
+            "stock": {
+                "id": 1,
+                "uuid": "019c9d08-738b-7315-b1f0-cf8dafd1db9f",
+                "symbol": "FPT",
+                "exchange_id": 1,
+                "industry_id": 2,
+                "quantity": 2000,
+                "avg_price": "95000.00",
+                "current_price": "92900.00",
+                "created_at": "2026-02-27T02:58:22.000000Z",
+                "updated_at": "2026-02-28T03:11:12.000000Z",
+                "exchange": {
+                    "id": 1,
+                    "uuid": "019c9d08-737e-712f-8833-ffd95f6b5ff6",
+                    "name": "VnDirect",
+                    "created_at": "2026-02-27T02:58:22.000000Z",
+                    "updated_at": "2026-02-27T09:14:28.000000Z"
+                }
+            }
+        },
+        {
+            "id": 3,
+            "uuid": "019c9d08-7390-7031-ad6b-2cbf3cb738ef",
+            "stock_id": 2,
+            "type": "buy",
+            "quantity": 3000,
+            "price": "85000.00",
+            "transaction_date": "2025-10-27T00:00:00.000000Z",
+            "created_at": "2026-02-27T02:58:22.000000Z",
+            "updated_at": "2026-02-27T02:58:22.000000Z",
+            "stock": {
+                "id": 2,
+                "uuid": "019c9d08-738f-7250-bc14-1787a6f9721d",
+                "symbol": "VCB",
+                "exchange_id": 1,
+                "industry_id": 1,
+                "quantity": 3000,
+                "avg_price": "85000.00",
+                "current_price": "64900.00",
+                "created_at": "2026-02-27T02:58:22.000000Z",
+                "updated_at": "2026-02-28T03:11:12.000000Z",
+                "exchange": {
+                    "id": 1,
+                    "uuid": "019c9d08-737e-712f-8833-ffd95f6b5ff6",
+                    "name": "VnDirect",
+                    "created_at": "2026-02-27T02:58:22.000000Z",
+                    "updated_at": "2026-02-27T09:14:28.000000Z"
+                }
+            }
+        },
+        {
+            "id": 4,
+            "uuid": "019c9d08-7392-7242-bdfa-573020936234",
+            "stock_id": 3,
+            "type": "buy",
+            "quantity": 5000,
+            "price": "45000.00",
+            "transaction_date": "2026-01-27T00:00:00.000000Z",
+            "created_at": "2026-02-27T02:58:22.000000Z",
+            "updated_at": "2026-02-27T02:58:22.000000Z",
+            "stock": {
+                "id": 3,
+                "uuid": "019c9d08-7391-708f-a58b-032e9faf9ea7",
+                "symbol": "MWG",
+                "exchange_id": 1,
+                "industry_id": 4,
+                "quantity": 5000,
+                "avg_price": "45000.00",
+                "current_price": "93100.00",
+                "created_at": "2026-02-27T02:58:22.000000Z",
+                "updated_at": "2026-02-28T03:11:12.000000Z",
+                "exchange": {
+                    "id": 1,
+                    "uuid": "019c9d08-737e-712f-8833-ffd95f6b5ff6",
+                    "name": "VnDirect",
+                    "created_at": "2026-02-27T02:58:22.000000Z",
+                    "updated_at": "2026-02-27T09:14:28.000000Z"
+                }
+            }
+        },
+        {
+            "id": 5,
+            "uuid": "019c9d08-7394-7374-ac5a-2e1776f7ea4f",
+            "stock_id": 4,
+            "type": "buy",
+            "quantity": 10000,
+            "price": "22000.00",
+            "transaction_date": "2026-02-13T00:00:00.000000Z",
+            "created_at": "2026-02-27T02:58:22.000000Z",
+            "updated_at": "2026-02-27T02:58:22.000000Z",
+            "stock": {
+                "id": 4,
+                "uuid": "019c9d08-7393-70e3-acd7-66c0852fd1a6",
+                "symbol": "CEO",
+                "exchange_id": 2,
+                "industry_id": 3,
+                "quantity": 10000,
+                "avg_price": "22000.00",
+                "current_price": "18100.00",
+                "created_at": "2026-02-27T02:58:22.000000Z",
+                "updated_at": "2026-02-28T03:11:11.000000Z",
+                "exchange": {
+                    "id": 2,
+                    "uuid": "019c9d08-7380-7171-82d6-f1892045ce3e",
+                    "name": "VPS",
+                    "created_at": "2026-02-27T02:58:22.000000Z",
+                    "updated_at": "2026-02-27T09:14:41.000000Z"
+                }
+            }
+        }
+    ]
+}

@@ -12,6 +12,7 @@ class DashboardController extends Controller
     {
         $invested = $portfolioService->calculateTotalInvested();
         $currentValue = $portfolioService->calculateTotalCurrentValue();
+        $wealthBreakdown = $portfolioService->getWealthBreakdown();
         $profitLoss = $portfolioService->calculateProfitLoss();
         $stockPerformance = $portfolioService->getStockPerformance();
         $bankComparison = $portfolioService->getBankComparison();
@@ -40,16 +41,23 @@ class DashboardController extends Controller
             'assetHistory',
             'liquidCashData',
             'allExchanges',
-            'userBalances'
+            'userBalances',
+            'wealthBreakdown'
         ));
     }
 
-    public function syncPrices()
+    public function syncPrices(PortfolioPerformanceService $portfolioService)
     {
         \Illuminate\Support\Facades\Artisan::call('app:sync-stock-prices');
-        $output = \Illuminate\Support\Facades\Artisan::output();
-        
-        return back()->with('success', 'Prices synced successfully!');
+
+        // Sau khi sync giá xong, chốt sổ tổng tài sản vào bảng asset_histories
+        $currentValue = $portfolioService->calculateTotalCurrentValue();
+        \App\Models\AssetHistory::updateOrCreate(
+            ['user_id' => auth()->id(), 'date' => now()->format('Y-m-d')],
+            ['total_value' => round($currentValue)]
+        );
+
+        return back()->with('success', 'Đồng bộ giá và chốt sổ tài sản thành công!');
     }
 
     public function realtime(PortfolioPerformanceService $portfolioService)
@@ -119,7 +127,7 @@ class DashboardController extends Controller
     {
         $request->validate([
             'balances'   => ['required', 'array'],
-            'balances.*' => ['nullable', 'numeric', 'min:0'],
+            'balances.*' => ['nullable', 'string'],
         ]);
 
         foreach ($request->balances as $exchangeId => $balance) {
@@ -130,9 +138,12 @@ class DashboardController extends Controller
                 continue;
             }
 
+            // Manually sanitize as this is a Controller method, not a FormRequest
+            $sanitizedBalance = (float) str_replace(',', '', $balance);
+
             UserExchangeBalance::updateOrCreate(
                 ['user_id' => auth()->id(), 'exchange_id' => $exchangeId],
-                ['balance' => $balance]
+                ['balance' => $sanitizedBalance]
             );
         }
 
@@ -141,7 +152,8 @@ class DashboardController extends Controller
 
     public function assetHistory(Request $request, PortfolioPerformanceService $portfolioService)
     {
-        $period = $request->get('period', 'month'); // day, week, month
-        return response()->json($portfolioService->getAssetHistory($period));
+        $period = $request->get('period', 'month');
+        $date = $request->get('date');
+        return response()->json($portfolioService->getAssetHistory($period, $date));
     }
 }

@@ -18,21 +18,31 @@
             <!-- Total Invested -->
             <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-4 md:p-6 flex flex-col justify-center items-start">
                 <div class="text-sm font-medium text-slate-500 mb-1">Tổng vốn đầu tư</div>
-                <div class="text-2xl md:text-3xl font-bold text-slate-900 private-number" data-value="{{ $invested }}">{{ number_format($invested, 2, ',', '.') }}</div>
+                <div class="text-2xl md:text-3xl font-bold text-slate-900 private-number" data-value="{{ $invested }}" data-currency="đ">{{ number_format($invested, 2, ',', '.') }}đ</div>
             </div>
 
             <!-- Current Portfolio Value -->
             <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-4 md:p-6 flex flex-col justify-center items-start">
                 <div class="text-sm font-medium text-slate-500 mb-1">Giá trị hiện tại</div>
-                <div class="text-2xl md:text-3xl font-bold text-slate-900 private-number" id="current-value-display" data-value="{{ $currentValue }}">{{ number_format($currentValue, 2, ',', '.') }}</div>
+                <div class="text-2xl md:text-3xl font-bold text-slate-900 private-number" id="current-value-display" data-value="{{ $currentValue }}" data-currency="đ">{{ number_format($currentValue, 2, ',', '.') }}đ</div>
+                <div class="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs font-medium border-t border-slate-50 pt-2 w-full">
+                    <div class="flex items-center text-slate-500">
+                        <span class="w-1.5 h-1.5 rounded-full bg-blue-500 mr-1.5"></span>
+                        Cổ phiếu: <span class="ml-1 text-slate-700 private-number" data-value="{{ $wealthBreakdown['stocks'] }}" data-currency="đ">{{ number_format($wealthBreakdown['stocks'], 2, ',', '.') }}đ</span>
+                    </div>
+                    <div class="flex items-center text-slate-500">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span>
+                        Tiền mặt: <span class="ml-1 text-slate-700 private-number" data-value="{{ $wealthBreakdown['liquid_cash'] }}" data-currency="đ">{{ number_format($wealthBreakdown['liquid_cash'], 2, ',', '.') }}đ</span>
+                    </div>
+                </div>
             </div>
 
             <!-- Total P&L -->
             <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-4 md:p-6 flex flex-col justify-center items-start">
                 <div class="text-sm font-medium text-slate-500 mb-1">Tổng Lợi nhuận / Thua lỗ</div>
                 <div class="flex items-baseline space-x-2">
-                    <div id="profit-loss-display" class="text-2xl md:text-3xl font-bold {{ $profitLoss['absolute'] >= 0 ? 'text-emerald-600' : 'text-rose-600' }} private-number" data-value="{{ $profitLoss['absolute'] }}" data-sign="{{ $profitLoss['absolute'] > 0 ? '+' : '' }}">
-                        {{ $profitLoss['absolute'] > 0 ? '+' : '' }}{{ number_format($profitLoss['absolute'], 2, ',', '.') }}
+                    <div id="profit-loss-display" class="text-2xl md:text-3xl font-bold {{ $profitLoss['absolute'] >= 0 ? 'text-emerald-600' : 'text-rose-600' }} private-number" data-value="{{ $profitLoss['absolute'] }}" data-sign="{{ $profitLoss['absolute'] > 0 ? '+' : '' }}" data-currency="đ">
+                        {{ $profitLoss['absolute'] > 0 ? '+' : '' }}{{ number_format($profitLoss['absolute'], 2, ',', '.') }}đ
                     </div>
                     <div id="profit-loss-percentage" class="text-sm font-medium {{ $profitLoss['percentage'] >= 0 ? 'text-emerald-500' : 'text-rose-500' }} private-number" data-value="{{ $profitLoss['percentage'] }}" data-sign="{{ $profitLoss['percentage'] > 0 ? '+' : '' }}" data-suffix="%">
                         ({{ $profitLoss['percentage'] > 0 ? '+' : '' }}{{ number_format($profitLoss['percentage'], 2, ',', '.') }}%)
@@ -57,8 +67,8 @@
                             <div class="border-l-2 border-amber-400 pl-3 py-1">
                                 <div class="font-medium text-slate-800 flex justify-between">
                                     <span class="truncate mr-2">{{ $exchange['exchange_name'] }}</span>
-                                    <span class="text-amber-600 font-bold shrink-0 private-number" data-value="{{ $exchange['liquid_cash'] }}">
-                                        {{ number_format($exchange['liquid_cash']) }}
+                                    <span class="text-amber-600 font-bold shrink-0 private-number" data-value="{{ $exchange['liquid_cash'] }}" data-currency="đ">
+                                        {{ number_format($exchange['liquid_cash']) }}đ
                                     </span>
                                 </div>
                             </div>
@@ -70,14 +80,14 @@
                 
                 <div class="w-full border-t border-slate-100 pt-3 mt-auto flex justify-between items-baseline">
                     <div class="text-xs text-slate-500">Tổng sức mua:</div>
-                    <div class="text-lg font-bold text-amber-600 private-number" data-value="{{ $liquidCashData['total_liquid'] }}">
-                        {{ number_format($liquidCashData['total_liquid'], 0) }}
+                    <div class="text-lg font-bold text-amber-600 private-number" data-value="{{ $liquidCashData['total_liquid'] }}" data-currency="đ">
+                        {{ number_format($liquidCashData['total_liquid'], 0) }}đ
                     </div>
                 </div>
             </div>
 
             <!-- Bank Equivalent -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-4 md:p-6 flex flex-col justify-start h-[200px] md:h-[250px] overflow-hidden relative">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-4 md:p-6 flex flex-col justify-start h-auto md:h-[250px] overflow-visible md:overflow-hidden relative">
                 <div class="text-sm font-medium text-slate-500 mb-4 flex items-center gap-1">
                     <svg class="h-4 w-4 shrink-0 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" /></svg>
                     <span class="truncate">So sánh Ngân hàng ({{ number_format(auth()->user()->bank_interest_rate ?? 7, 1) }}%/năm)</span>
@@ -89,30 +99,30 @@
                         <tbody>
                             <tr class="border-b border-slate-100/60">
                                 <td class="py-1.5 text-slate-500">Tổng nạp các sàn:</td>
-                                <td class="py-1.5 text-right font-semibold text-slate-800 private-number" data-value="{{ $bankComparison['total_net_deposited'] }}">{{ number_format($bankComparison['total_net_deposited']) }}</td>
+                                <td class="py-1.5 text-right font-semibold text-slate-800 private-number" data-value="{{ $bankComparison['total_net_deposited'] }}" data-currency="đ">{{ number_format($bankComparison['total_net_deposited']) }}đ</td>
                             </tr>
                             <tr class="border-b border-slate-100/60">
                                 <td class="py-1.5 text-slate-500 align-top">Nếu gửi Ngân hàng:</td>
                                 <td class="py-1.5 text-right">
-                                    <div class="font-bold text-slate-800 private-number" data-value="{{ $bankComparison['total_bank_value'] }}">{{ number_format($bankComparison['total_bank_value']) }}</div>
-                                    <div class="text-[10px] text-emerald-600 font-medium private-number" data-value="{{ $bankComparison['total_bank_profit'] }}" data-sign="+">Lãi: +{{ number_format($bankComparison['total_bank_profit']) }}</div>
+                                    <div class="font-bold text-slate-800 private-number" data-value="{{ $bankComparison['total_bank_value'] }}" data-currency="đ">{{ number_format($bankComparison['total_bank_value']) }}đ</div>
+                                    <div class="text-[10px] text-emerald-600 font-medium private-number" data-value="{{ $bankComparison['total_bank_profit'] }}" data-sign="+" data-currency="đ">Lãi: +{{ number_format($bankComparison['total_bank_profit']) }}đ</div>
                                 </td>
                             </tr>
                             @php $investValue = $bankComparison['total_net_deposited'] + $bankComparison['actual_profit']; @endphp
                             <tr class="border-b border-slate-100/60">
                                 <td class="py-1.5 text-slate-500 align-top">Nếu nạp Đầu tư:</td>
                                 <td class="py-1.5 text-right">
-                                    <div class="font-bold text-indigo-600 private-number" data-value="{{ $investValue }}">{{ number_format($investValue) }}</div>
-                                    <div class="text-[10px] {{ $bankComparison['actual_profit'] >= 0 ? 'text-emerald-600' : 'text-rose-600' }} font-medium private-number" data-value="{{ $bankComparison['actual_profit'] }}" data-sign="{{ $bankComparison['actual_profit'] >= 0 ? '+' : '' }}">
-                                        Lời: {{ $bankComparison['actual_profit'] >= 0 ? '+' : '' }}{{ number_format($bankComparison['actual_profit']) }}
+                                    <div class="font-bold text-indigo-600 private-number" data-value="{{ $investValue }}" data-currency="đ">{{ number_format($investValue) }}đ</div>
+                                    <div class="text-[10px] {{ $bankComparison['actual_profit'] >= 0 ? 'text-emerald-600' : 'text-rose-600' }} font-medium private-number" data-value="{{ $bankComparison['actual_profit'] }}" data-sign="{{ $bankComparison['actual_profit'] >= 0 ? '+' : '' }}" data-currency="đ">
+                                        Lời: {{ $bankComparison['actual_profit'] >= 0 ? '+' : '' }}{{ number_format($bankComparison['actual_profit']) }}đ
                                     </div>
                                 </td>
                             </tr>
                             <tr>
-                                <td class="py-2 text-slate-700 font-semibold">Chênh lệch:</td>
+                                <td class="py-2 text-slate-700 font-semibold">Hiệu suất đầu tư:</td>
                                 <td class="py-2 text-right">
-                                    <div class="text-base font-bold {{ $bankComparison['profit_difference'] >= 0 ? 'text-emerald-600' : 'text-rose-600' }} private-number" data-value="{{ $bankComparison['profit_difference'] }}" data-sign="{{ $bankComparison['profit_difference'] > 0 ? '+' : '' }}">
-                                        {{ $bankComparison['profit_difference'] > 0 ? '+' : '' }}{{ number_format($bankComparison['profit_difference']) }}
+                                    <div class="text-base font-bold {{ $bankComparison['profit_difference'] >= 0 ? 'text-emerald-600' : 'text-rose-600' }} private-number" data-value="{{ $bankComparison['profit_difference'] }}" data-sign="{{ $bankComparison['profit_difference'] > 0 ? '+' : '' }}" data-currency="đ">
+                                        {{ $bankComparison['profit_difference'] > 0 ? '+' : '' }}{{ number_format($bankComparison['profit_difference']) }}đ
                                     </div>
                                 </td>
                             </tr>
@@ -162,22 +172,30 @@
         </div>
 
         <!-- Asset History Chart with Period Toggle -->
+        @if($assetHistory['has_real_data'])
         <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-4 md:p-6 flex flex-col h-[350px] md:h-[450px]">
             <div class="flex flex-wrap justify-between items-center mb-4 border-b border-slate-100 pb-3 gap-2">
                 <div class="flex items-center gap-3">
                     <h3 class="text-lg font-semibold text-slate-800">Tăng trưởng tài sản</h3>
                     <span id="last-updated-time" class="text-xs font-medium text-slate-400 bg-slate-50 px-2 py-0.5 rounded border border-slate-100 hidden md:inline-block">Đồng bộ...</span>
                 </div>
-                <div class="flex gap-1" id="chart-period-toggles">
-                    <button data-period="day" class="px-3 py-1 text-xs font-medium rounded period-btn bg-white text-slate-600 border border-slate-200 hover:bg-slate-50">Ngày</button>
-                    <button data-period="week" class="px-3 py-1 text-xs font-medium rounded period-btn bg-white text-slate-600 border border-slate-200 hover:bg-slate-50">Tuần</button>
-                    <button data-period="month" class="px-3 py-1 text-xs font-medium rounded period-btn bg-blue-50 text-blue-700 border border-blue-200">Tháng</button>
+                <div class="flex flex-wrap items-center gap-3" id="chart-controls">
+                    <div class="flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-lg px-2 py-1" id="date-picker-container" style="display: none;">
+                        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                        <input type="text" id="chart-date-picker" class="bg-transparent border-none p-0 text-xs font-medium text-slate-600 focus:ring-0 w-24 cursor-pointer" value="{{ now()->format('d/m/Y') }}" readonly>
+                    </div>
+                    <div class="flex gap-1" id="chart-period-toggles">
+                        <button data-period="custom_60" class="px-3 py-1 text-xs font-medium rounded period-btn bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-colors">60 ngày từ ngày chọn</button>
+                        <button data-period="month" class="px-3 py-1 text-xs font-medium rounded period-btn bg-blue-50 text-blue-700 border border-blue-200 transition-colors">Hôm nay</button>
+                        <button data-period="year" class="px-3 py-1 text-xs font-medium rounded period-btn bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-colors">Xem tất cả</button>
+                    </div>
                 </div>
             </div>
             <div class="flex-1 relative w-full h-full">
                 <canvas id="assetHistoryChart"></canvas>
             </div>
         </div>
+        @endif
 
         <!-- Assets Breakdown Table -->
         <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden mb-6">
@@ -200,6 +218,7 @@
                 <table class="min-w-full divide-y divide-slate-200" id="portfolio-table">
                     <thead class="bg-slate-50 select-none">
                         <tr>
+                            <th scope="col" class="px-4 py-4 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap w-12">STT</th>
                             <th scope="col" data-sort="symbol" class="cursor-pointer px-4 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider group whitespace-nowrap">Mã <span class="sort-arrow text-slate-300">↕</span></th>
                             <th scope="col" data-sort="exchange" class="cursor-pointer px-4 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider group whitespace-nowrap">Công ty CK <span class="sort-arrow text-slate-300">↕</span></th>
                             <th scope="col" data-sort="industry" class="cursor-pointer px-4 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider group whitespace-nowrap">Ngành <span class="sort-arrow text-slate-300">↕</span></th>
@@ -209,66 +228,56 @@
                             <th scope="col" data-sort="invested" class="cursor-pointer px-4 py-4 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider group whitespace-nowrap">Tổng vốn ĐT <span class="sort-arrow text-slate-300">↕</span></th>
                             <th scope="col" data-sort="current-value" class="cursor-pointer px-4 py-4 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider group whitespace-nowrap">Giá trị hiện tại <span class="sort-arrow text-slate-300">↕</span></th>
                             <th scope="col" data-sort="profit" class="cursor-pointer px-4 py-4 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider group whitespace-nowrap">Lãi/Lỗ <span class="sort-arrow text-slate-300">↕</span></th>
-
-                            <th scope="col" class="relative px-4 py-4"><span class="sr-only">Hành động</span></th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 bg-white text-sm">
                         @forelse($stockPerformance as $performance)
-                            @php
-                                $currentVal = $performance['stock']->quantity * $performance['stock']->current_price;
-                            @endphp
-                            <tr class="hover:bg-slate-50/70 transition-colors portfolio-row" 
-                                data-symbol="{{ $performance['stock']->symbol }}"
-                                data-exchange="{{ optional($performance['stock']->exchange)->name ?? '' }}"
-                                data-industry="{{ optional($performance['stock']->industry)->name ?? '' }}"
-                                data-quantity="{{ $performance['stock']->quantity }}"
-                                data-price="{{ $performance['stock']->avg_price }}"
-                                data-current-price="{{ $performance['stock']->current_price }}"
+                            <tr class="hover:bg-slate-50/70 transition-colors portfolio-row"
+                                data-symbol="{{ $performance['symbol'] }}"
+                                data-exchange="{{ $performance['exchange_display'] }}"
+                                data-industry="{{ $performance['industry'] }}"
+                                data-quantity="{{ $performance['quantity'] }}"
+                                data-price="{{ $performance['avg_price'] }}"
+                                data-current-price="{{ $performance['current_price'] }}"
                                 data-invested="{{ $performance['invested'] }}"
-                                data-current-value="{{ $currentVal }}"
+                                data-current-value="{{ $performance['current_value'] }}"
                                 data-profit="{{ $performance['profit'] }}"
                                 data-profit-pct="{{ $performance['profit_percentage'] }}"
                             >
+                                <td class="px-4 py-4 whitespace-nowrap text-center text-sm font-medium text-slate-500 stt-cell">
+                                    {{ $loop->iteration }}
+                                </td>
                                 <td class="px-4 py-4 whitespace-nowrap">
-                                    <span class="font-bold text-slate-900 border border-slate-200 rounded px-2 py-1 inline-block bg-slate-50 text-sm">{{ $performance['stock']->symbol }}</span>
+                                    <span class="font-bold text-slate-900 border border-slate-200 rounded px-2 py-1 inline-block bg-slate-50 text-sm">{{ $performance['symbol'] }}</span>
                                 </td>
                                 <td class="px-4 py-4 whitespace-nowrap text-sm text-slate-500">
-                                    {{ optional($performance['stock']->exchange)->name ?? '-' }}
+                                    {{ $performance['exchange_display'] ?: '-' }}
                                 </td>
                                 <td class="px-4 py-4 whitespace-nowrap text-sm text-slate-500">
-                                    {{ optional($performance['stock']->industry)->name ?? '-' }}
+                                    {{ $performance['industry'] ?: '-' }}
                                 </td>
-                                <td class="px-4 py-4 whitespace-nowrap text-right text-sm font-medium text-slate-700 private-number" data-value="{{ $performance['stock']->quantity }}">
-                                    {{ number_format($performance['stock']->quantity) }}
+                                <td class="px-4 py-4 whitespace-nowrap text-right text-sm font-medium text-slate-700 private-number" data-value="{{ $performance['quantity'] }}">
+                                    {{ number_format($performance['quantity']) }}
                                 </td>
                                 <td class="px-4 py-4 whitespace-nowrap text-right text-sm text-slate-600">
-                                    {{ number_format($performance['stock']->avg_price / 1000, 2, ',', '.') }}
+                                    {{ number_format($performance['avg_price'] / 1000, 2, ',', '.') }}
                                 </td>
-                                <td class="px-4 py-4 whitespace-nowrap text-right text-sm font-medium text-slate-800" id="current-price-{{ $performance['stock']->symbol }}">
-                                    {{ number_format($performance['stock']->current_price / 1000, 2, ',', '.') }}
+                                <td class="px-4 py-4 whitespace-nowrap text-right text-sm font-medium text-slate-800" id="current-price-{{ $performance['symbol'] }}">
+                                    {{ number_format($performance['current_price'] / 1000, 2, ',', '.') }}
                                 </td>
                                 <td class="px-4 py-4 whitespace-nowrap text-right text-sm text-slate-600 private-number" data-value="{{ $performance['invested'] / 1000000 }}" data-suffix=" Tr">
                                     {{ number_format($performance['invested'] / 1000000, 2, ',', '.') }} Tr
                                 </td>
-                                <td class="px-4 py-4 whitespace-nowrap text-right text-sm font-medium text-slate-800 private-number" data-value="{{ $currentVal / 1000000 }}" data-suffix=" Tr">
-                                    {{ number_format($currentVal / 1000000, 2, ',', '.') }} Tr
+                                <td class="px-4 py-4 whitespace-nowrap text-right text-sm font-medium text-slate-800 private-number" data-value="{{ $performance['current_value'] / 1000000 }}" data-suffix=" Tr">
+                                    {{ number_format($performance['current_value'] / 1000000, 2, ',', '.') }} Tr
                                 </td>
                                 <td class="px-4 py-4 whitespace-nowrap text-right">
-                                    <div id="pnl-abs-{{ $performance['stock']->symbol }}" class="font-bold text-sm {{ $performance['profit'] >= 0 ? 'text-emerald-600' : 'text-rose-600' }} private-number" data-value="{{ $performance['profit'] / 1000000 }}" data-sign="{{ $performance['profit'] > 0 ? '+' : '' }}" data-suffix=" Tr">
+                                    <div id="pnl-abs-{{ $performance['symbol'] }}" class="font-bold text-sm {{ $performance['profit'] >= 0 ? 'text-emerald-600' : 'text-rose-600' }} private-number" data-value="{{ $performance['profit'] / 1000000 }}" data-sign="{{ $performance['profit'] > 0 ? '+' : '' }}" data-suffix=" Tr">
                                         {{ $performance['profit'] > 0 ? '+' : '' }}{{ number_format($performance['profit'] / 1000000, 2, ',', '.') }} Tr
                                     </div>
-                                    <div id="pnl-pct-{{ $performance['stock']->symbol }}" class="text-xs font-medium {{ $performance['profit_percentage'] >= 0 ? 'text-emerald-500' : 'text-rose-500' }}">
+                                    <div id="pnl-pct-{{ $performance['symbol'] }}" class="text-xs font-medium {{ $performance['profit_percentage'] >= 0 ? 'text-emerald-500' : 'text-rose-500' }}">
                                         {{ $performance['profit_percentage'] > 0 ? '+' : '' }}{{ number_format($performance['profit_percentage'], 2, ',', '.') }}%
                                     </div>
-                                </td>
-                                <td class="px-4 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <a href="{{ route('stocks.edit', $performance['stock']) }}" class="text-indigo-600 hover:text-indigo-900 mr-2">Sửa</a>
-                                    <form action="{{ route('stocks.destroy', $performance['stock']) }}" method="POST" class="inline-block">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:text-red-900" onclick="return confirm('Xóa cổ phiếu {{ $performance['stock']->symbol }}?')">Xóa</button>
-                                    </form>
                                 </td>
                             </tr>
                         @empty
@@ -301,7 +310,7 @@
                                             <div class="flex items-center justify-between gap-4">
                                                 <label class="text-sm font-medium text-slate-700 w-1/3">{{ $exchange->name }}</label>
                                                 <div class="flex items-center gap-2 w-2/3">
-                                                    <input type="number" name="balances[{{ $exchange->id }}]" value="{{ $userBalances[$exchange->id] ?? '' }}" min="0" step="1000" placeholder="VD: 50000000" class="border-slate-300 focus:border-blue-500 focus:ring-blue-500 rounded-md shadow-sm text-sm w-full" />
+                                                    <input type="text" name="balances[{{ $exchange->id }}]" value="{{ isset($userBalances[$exchange->id]) ? number_format($userBalances[$exchange->id], 0, '.', ',') : '' }}" placeholder="VD: 50,000,000" class="money-input border-slate-300 focus:border-blue-500 focus:ring-blue-500 rounded-md shadow-sm text-sm w-full" />
                                                     <span class="text-xs text-slate-400">VNĐ</span>
                                                 </div>
                                             </div>
@@ -341,27 +350,29 @@
             const _privMeta = new WeakMap();
             document.querySelectorAll('.private-number').forEach(el => {
                 _privMeta.set(el, {
-                    value:  parseFloat(el.getAttribute('data-value') || 0),
-                    sign:   el.getAttribute('data-sign')   || '',
-                    suffix: el.getAttribute('data-suffix') || '',
+                    value:    parseFloat(el.getAttribute('data-value') || 0),
+                    sign:     el.getAttribute('data-sign')     || '',
+                    suffix:   el.getAttribute('data-suffix')   || '',
+                    currency: el.getAttribute('data-currency') || '',
                 });
                 // Strip attrs from DOM so DevTools can't read the raw number
                 el.removeAttribute('data-value');
                 el.removeAttribute('data-sign');
                 el.removeAttribute('data-suffix');
+                el.removeAttribute('data-currency');
             });
 
             function formatPrivateEl(el) {
                 const meta   = _privMeta.get(el);
                 if (!meta) return;
-                const { value, sign, suffix } = meta;
+                const { value, sign, suffix, currency } = meta;
                 let fmt;
                 if (suffix === ' Tr' || suffix === '%') {
                     fmt = new Intl.NumberFormat('vi-VN', { maximumFractionDigits: 2 }).format(value);
                 } else {
                     fmt = formatMoney(value);
                 }
-                el.innerText = (sign + fmt + suffix).replace('+-', '-');
+                el.innerText = (sign + fmt + suffix + currency).replace('+-', '-');
             }
 
             function applyPrivacyState() {
@@ -445,14 +456,21 @@
                     type: 'bar',
                     data: {
                         labels: {!! json_encode($assetHistory['labels']) !!},
-                        datasets: [{ label: 'Giá trị (VND x1000)', data: {!! json_encode($assetHistory['data']) !!}.map(v=>v/1000), backgroundColor: '#3b82f6', borderRadius: 4 }]
+                        datasets: [{ label: 'Giá trị (VND)', data: {!! json_encode($assetHistory['data']) !!}, backgroundColor: '#3b82f6', borderRadius: 4 }]
                     },
                     options: {
                         responsive: true, maintainAspectRatio: false,
                         interaction: { mode: 'index', intersect: false },
                         scales: {
                             y: { grid: { drawBorder: false }, ticks: { callback: v => formatMoney(v) } },
-                            x: { grid: { display: false } }
+                            x: { 
+                                grid: { display: false },
+                                ticks: {
+                                    maxRotation: 45,
+                                    autoSkip: false,
+                                    font: { size: 9 }
+                                }
+                            }
                         },
                         plugins: {
                             legend: { display: false },
@@ -462,9 +480,45 @@
                 });
             }
 
-            // Handle period changes
+            // Handle period and date changes
+            let currentPeriod = 'month';
+
+            const datePicker = flatpickr("#chart-date-picker", {
+                dateFormat: "d/m/Y",
+                maxDate: "today",
+                defaultDate: "today",
+                onChange: function() {
+                    updateHistoryChart();
+                }
+            });
+
+            function updateHistoryChart() {
+                let url = `{{ route('dashboard.asset-history') }}?period=${currentPeriod}`;
+                
+                if (currentPeriod === 'custom_60') {
+                    const date = document.getElementById('chart-date-picker').value;
+                    url += `&date=${date}`;
+                }
+                
+                fetch(url)
+                    .then(res => {
+                        if (!res.ok) throw new Error('Network response was not ok');
+                        return res.json();
+                    })
+                    .then(data => {
+                        if (historyChart && data.labels && data.data) {
+                            historyChart.data.labels = data.labels;
+                            historyChart.data.datasets[0].data = data.data;
+                            historyChart.update();
+                        }
+                    })
+                    .catch(err => console.error('Fetch error:', err));
+            }
+
             document.querySelectorAll('.period-btn').forEach(btn => {
                 btn.addEventListener('click', function(e) {
+                    currentPeriod = this.getAttribute('data-period');
+                    
                     // Update active styling
                     document.querySelectorAll('.period-btn').forEach(b => {
                         b.classList.remove('bg-blue-50', 'text-blue-700', 'border-blue-200');
@@ -473,22 +527,15 @@
                     this.classList.remove('bg-white', 'text-slate-600', 'border-slate-200');
                     this.classList.add('bg-blue-50', 'text-blue-700', 'border-blue-200');
 
-                    const period = this.getAttribute('data-period');
-                    fetch('{{ route('dashboard.asset-history') }}?period=' + period)
-                        .then(res => {
-                            if (!res.ok) throw new Error('Network response was not ok');
-                            return res.json();
-                        })
-                        .then(data => {
-                            if (historyChart && data.labels && data.data) {
-                                historyChart.data.labels = data.labels;
-                                historyChart.data.datasets[0].data = data.data.map(v => v/1000);
-                                historyChart.update();
-                            }
-                        })
-                        .catch(err => {
-                            console.error('Error updating chart:', err);
-                        });
+                    // Show/hide date-picker-container
+                    const container = document.getElementById('date-picker-container');
+                    if (currentPeriod === 'custom_60') {
+                        container.style.display = 'flex';
+                    } else {
+                        container.style.display = 'none';
+                    }
+
+                    updateHistoryChart();
                 });
             });
 
@@ -591,7 +638,11 @@
                     });
 
                     tbody.innerHTML = '';
-                    rows.forEach(r => tbody.appendChild(r));
+                    rows.forEach((r, index) => {
+                        const sttCell = r.querySelector('.stt-cell');
+                        if (sttCell) sttCell.textContent = index + 1;
+                        tbody.appendChild(r);
+                    });
                 });
             });
         });

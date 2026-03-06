@@ -1,0 +1,22 @@
+
+  Migration name .......... Batch / Status  
+  0001_01_01_000000_create_users_table  [1] Ran  
+  0001_01_01_000001_create_cache_table  [1] Ran  
+  0001_01_01_000002_create_jobs_table  [1] Ran  
+  2014_10_12_000000_create_users_table  Pending  
+  2014_10_12_100000_create_password_reset_tokens_table  Pending  
+  2019_08_19_000000_create_failed_jobs_table  Pending  
+  2019_12_14_000001_create_personal_access_tokens_table  Pending  
+  2026_02_27_023332_create_exchanges_table  [1] Ran  
+  2026_02_27_023332_create_industries_table  [1] Ran  
+  2026_02_27_023332_create_stocks_table  [1] Ran  
+  2026_02_27_023333_create_cash_flows_table  [1] Ran  
+  2026_02_27_023333_create_stock_transactions_table  [1] Ran  
+  2026_02_28_025153_update_stocks_table_symbol_exchange_unique_constraint  [1] Ran  
+  2026_02_28_062918_add_app_settings_to_users_table  [1] Ran  
+  2026_03_02_011420_add_role_to_users_table  [1] Ran  
+  2026_03_02_011427_add_user_id_to_stocks_and_cash_flows  [1] Ran  
+  2026_03_02_091022_create_user_exchange_balances_table  [2] Ran  
+  2026_03_02_093240_update_stocks_unique_constraint_add_user_id  [3] Ran  
+  2026_03_04_161800_create_asset_histories_table  Pending  
+

@@ -1,0 +1,22 @@
+
+   Psy\Exception\ParseErrorException 
+
+  PHP Parse error: Syntax error, unexpected T_NS_SEPARATOR, expecting T_VARIABLE on line 1
+
+  at vendor\psy\psysh\src\Exception\ParseErrorException.php:44
+     40▕      * @param \PhpParser\Error $e
+     41▕      */
+     42▕     public static function fromParseError(\PhpParser\Error $e): self
+     43▕     {
+  ➜  44▕         return new self($e->getRawMessage(), $e->getAttributes());
+     45▕     }
+     46▕ }
+     47▕
+
+  1   vendor\psy\psysh\src\CodeCleaner.php:488
+      Psy\Exception\ParseErrorException::fromParseError(Object(PhpParser\Error))
+
+  2   vendor\psy\psysh\src\CodeCleaner.php:269
+      Psy\CodeCleaner::parse("<?php echo json_encode([ 'VNDirect_CashFlow' => App\Models\CashFlow::where('exchange_id', 1)->get()->toArray(), 'VNDirect_BuyTransactions' => App\Models\StockTransaction::whereHas('stock', function(\) { \->where('exchange_id', 1); })->where('type', 'buy')->get()->toArray() ], JSON_PRETTY_PRINT);
+")
+

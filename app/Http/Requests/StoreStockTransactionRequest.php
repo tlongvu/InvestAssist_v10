@@ -14,11 +14,8 @@ class StoreStockTransactionRequest extends FormRequest
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
+    use \App\Traits\SanitizesMoneyInput;
+
     public function rules(): array
     {
         return [
@@ -28,5 +25,14 @@ class StoreStockTransactionRequest extends FormRequest
             'price' => ['required', 'numeric', 'min:0.01'],
             'transaction_date' => ['required', 'date'],
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        if ($this->has('price')) {
+            $this->merge([
+                'price' => $this->sanitizeMoney($this->price),
+            ]);
+        }
     }
 }

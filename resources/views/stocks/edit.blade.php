@@ -57,14 +57,14 @@
                             <!-- Avg Price -->
                             <div>
                                 <x-input-label for="avg_price" :value="__('Average Price')" />
-                                <x-text-input id="avg_price" class="block mt-1 w-full" type="number" step="0.001" min="0" name="avg_price" :value="old('avg_price', $stock->avg_price / 1000)" required />
+                                <x-text-input id="avg_price" class="money-input block mt-1 w-full" type="text" name="avg_price" :value="old('avg_price', number_format($stock->avg_price / 1000, 2, '.', ','))" required />
                                 <x-input-error :messages="$errors->get('avg_price')" class="mt-2" />
                             </div>
 
                             <!-- Current Price -->
                             <div>
                                 <x-input-label for="current_price" :value="__('Current Price')" />
-                                <x-text-input id="current_price" class="block mt-1 w-full" type="number" step="0.001" min="0" name="current_price" :value="old('current_price', $stock->current_price / 1000)" required />
+                                <x-text-input id="current_price" class="money-input block mt-1 w-full" type="text" name="current_price" :value="old('current_price', number_format($stock->current_price / 1000, 2, '.', ','))" required />
                                 <x-input-error :messages="$errors->get('current_price')" class="mt-2" />
                             </div>
                         </div>
